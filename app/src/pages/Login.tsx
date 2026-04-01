@@ -44,16 +44,16 @@ export function Login() {
     }
 
     // 显示验证码
-    // if (!showCaptcha) {
-    //   setShowCaptcha(true);
-    //   return;
-    // }
+    if (!showCaptcha) {
+      setShowCaptcha(true);
+      return;
+    }
 
-    // // 验证验证码
-    // if (!captchaVerified) {
-    //   setError('请完成滑块验证');
-    //   return;
-    // }
+    // 验证验证码
+    if (!captchaVerified) {
+      setError('请完成滑块验证');
+      return;
+    }
 
     setLoading(true);
     try {
