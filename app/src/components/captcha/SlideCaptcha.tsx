@@ -21,7 +21,6 @@ export function SlideCaptcha({
   const [verified, setVerified] = useState(false);
   const [failed, setFailed] = useState(false);
   const [targetX, setTargetX] = useState(0);
-  const targetXRef = useRef(0);
   const startXRef = useRef(0);
   const sliderWidth = 40;
   const trackWidth = width - sliderWidth - 20;
@@ -65,7 +64,6 @@ export function SlideCaptcha({
 
     // 绘制目标滑块凹槽
     const target = generateTarget();
-    targetXRef.current = target;
     setTargetX(target);
     
     // 绘制凹槽阴影
@@ -94,11 +92,7 @@ export function SlideCaptcha({
     if (verified) return;
     
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    const sliderRect = sliderRef.current?.getBoundingClientRect();
-    const canvasRect = canvasRef.current?.getBoundingClientRect();
-    if (!sliderRect || !canvasRect) return;
-    
-    startXRef.current = clientX - sliderRect.left + 10;
+    startXRef.current = clientX - sliderX;
     setIsDragging(true);
     setFailed(false);
   };
@@ -119,8 +113,8 @@ export function SlideCaptcha({
       setIsDragging(false);
       
       // 验证位置
-      const tolerance = 15;
-      if (Math.abs(sliderX - targetXRef.current) <= tolerance) {
+      const tolerance = 5;
+      if (Math.abs(sliderX - targetX) <= tolerance) {
         setVerified(true);
         onVerify(true);
       } else {
