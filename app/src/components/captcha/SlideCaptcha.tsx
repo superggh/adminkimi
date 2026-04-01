@@ -94,7 +94,11 @@ export function SlideCaptcha({
     if (verified) return;
     
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-    startXRef.current = clientX - sliderX;
+    const sliderRect = sliderRef.current?.getBoundingClientRect();
+    const canvasRect = canvasRef.current?.getBoundingClientRect();
+    if (!sliderRect || !canvasRect) return;
+    
+    startXRef.current = clientX - sliderRect.left + 10;
     setIsDragging(true);
     setFailed(false);
   };
@@ -115,7 +119,7 @@ export function SlideCaptcha({
       setIsDragging(false);
       
       // 验证位置
-      const tolerance = 5;
+      const tolerance = 15;
       if (Math.abs(sliderX - targetXRef.current) <= tolerance) {
         setVerified(true);
         onVerify(true);
